@@ -158,12 +158,40 @@ window.addEventListener('scroll', () => {
     hero.style.backgroundPositionY = scrolled * 0.5 + 'px';
 });
 
-// Mobile navigation toggle
-const nav = document.querySelector('.nav-links');
-const navHeight = nav.getBoundingClientRect().height;
+// Enhanced Mobile Navigation
+const hamburger = document.querySelector('.hamburger');
+const navLinks = document.querySelector('.nav-links');
+const navLinksItems = document.querySelectorAll('.nav-link');
 
-window.addEventListener('resize', () => {
-    if (window.innerWidth > 768) {
-        nav.style.height = 'auto';
+function toggleMenu() {
+    hamburger.classList.toggle('active');
+    navLinks.classList.toggle('active');
+    document.body.classList.toggle('menu-open');
+}
+
+hamburger.addEventListener('click', toggleMenu);
+
+// Close menu when clicking nav items
+navLinksItems.forEach(item => {
+    item.addEventListener('click', () => {
+        if (navLinks.classList.contains('active')) {
+            toggleMenu();
+        }
+    });
+});
+
+// Close menu when clicking outside
+document.addEventListener('click', (e) => {
+    if (navLinks.classList.contains('active') && 
+        !e.target.closest('.nav') && 
+        !e.target.closest('.hamburger')) {
+        toggleMenu();
     }
 });
+
+// Handle resize events
+window.addEventListener('resize', () => {
+    if (window.innerWidth > 768 && navLinks.classList.contains('active')) {
+        toggleMenu();
+    }
+});;
