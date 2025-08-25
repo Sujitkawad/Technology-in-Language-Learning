@@ -96,6 +96,52 @@ function animateStats() {
     });
 }
 
+// Hero section parallax effect
+const floatingItems = document.querySelectorAll('.floating-item');
+
+document.addEventListener('mousemove', (e) => {
+    const mouseX = e.clientX / window.innerWidth;
+    const mouseY = e.clientY / window.innerHeight;
+
+    floatingItems.forEach(item => {
+        const speed = parseFloat(item.getAttribute('data-speed')) || 1;
+        const x = (mouseX - 0.5) * 20 * speed;
+        const y = (mouseY - 0.5) * 20 * speed;
+        item.style.transform = `translate(${x}px, ${y}px) rotate(${x * 0.5}deg)`;
+    });
+});
+
+// Enhanced number counter animation
+function animateCounter(element) {
+    const target = parseInt(element.textContent.replace(/\D/g, ''));
+    const duration = 2000;
+    const step = target / (duration / 16);
+    let current = 0;
+
+    function update() {
+        if (current < target) {
+            current = Math.min(current + step, target);
+            element.textContent = Math.floor(current).toLocaleString() + '+';
+            requestAnimationFrame(update);
+        }
+    }
+
+    update();
+}
+
+// Initialize counters when they come into view
+const counterElements = document.querySelectorAll('.counter');
+const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            animateCounter(entry.target);
+            counterObserver.unobserve(entry.target);
+        }
+    });
+}, { threshold: 0.5 });
+
+counterElements.forEach(counter => counterObserver.observe(counter));
+
 // Event listeners
 window.addEventListener('scroll', () => {
     updateActiveLink();
