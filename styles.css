@@ -972,12 +972,50 @@ blockquote {
 }
 
 .btn-secondary {
-    background: transparent;
+    background: rgba(255, 255, 255, 0.1);
     color: var(--primary-color);
     border: 2px solid var(--primary-color);
+    backdrop-filter: blur(5px);
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.btn-secondary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background: var(--primary-color);
+    transition: all 0.5s ease;
+    z-index: -1;
 }
 
 .btn-secondary:hover {
-    background: rgba(37, 99, 235, 0.1);
+    color: white;
     transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.15);
+}
+
+.btn-secondary:hover::before {
+    width: 100%;
+}
+
+.btn-secondary:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
+}
+
+/* Add spacing between buttons */
+.hero-buttons .btn + .btn {
+    margin-left: 1rem;
+}
+
+@media (max-width: 768px) {
+    .hero-buttons .btn {
+        margin: 0.5rem;
+        min-width: 200px;
+    }
 }
